@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'PradoSystems\\Auth\\' => array($vendorDir . '/pradosystems/auth/src'),
+    'App\\' => array($baseDir . '/src'),
 );

@@ -34,13 +34,18 @@ if ($route === '') {
 }
 
 $routes = [
-    '/'              => '/../pages/home.php',          // Agora bate com https://dominio.com/
+    '/'             => '/../pages/home.php', 
+    '/home'         => '/../pages/home.php', 
     '/login'        => '/../pages/login.php',
     '/register'     => '/../pages/register.php',
     '/perfil'       => '/../pages/perfil.php',
     '/admin-panel'  => '/../pages/admin-panel.php',
     '/logout'       => '/../pages/logout.php',
+    '/users'        => '/../pages/users.php', 
 ];
+
+// echo "Rota processada: [" . $route . "]";
+
 
 // 6. Execução da Rota
 if (array_key_exists($route, $routes)) {

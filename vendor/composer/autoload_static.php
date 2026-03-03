@@ -15,12 +15,20 @@ class ComposerStaticInitf3a553082d1d4c583746fd17f4097f2e
         array (
             'PradoSystems\\Auth\\' => 18,
         ),
+        'A' => 
+        array (
+            'App\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'PradoSystems\\Auth\\' => 
         array (
             0 => __DIR__ . '/..' . '/pradosystems/auth/src',
+        ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

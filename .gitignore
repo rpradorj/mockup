@@ -1,0 +1,4 @@
+vendor/
+data/users.json
+.env
+composer.lock

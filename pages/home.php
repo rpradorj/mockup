@@ -12,6 +12,7 @@ if (!isset($_SESSION['user_token'])) {
     exit;
 }
 
+$userName  = $_SESSION['user_name'] ?? 'Usuário'; 
 $userEmail = $_SESSION['user_email'] ?? 'Usuário';
 $userToken = $_SESSION['user_token'] ?? '';
 ?>
@@ -27,7 +28,7 @@ $userToken = $_SESSION['user_token'] ?? '';
             <header class="flex justify-between items-center mb-12">
                 <div>
                     <h1 class="text-white text-3xl font-bold font-['Montserrat'] tracking-tight">Dashboard</h1>
-                    <p class="text-gray-500 text-sm mt-1">Bem-vindo à sua área segura, <span class="text-violet-500 font-semibold"><?= htmlspecialchars($userEmail) ?></span></p>
+                    <p class="text-gray-500 text-sm mt-1">Bem-vindo à sua área segura, <span class="text-violet-500 font-semibold"><?= htmlspecialchars($userName) ?></span></p>
                 </div>
 
                 <div class="flex items-center gap-4">
