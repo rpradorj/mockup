@@ -1,0 +1,55 @@
+{
+    "packages": [
+        {
+            "name": "pradosystems/auth",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "dist": {
+                "type": "path",
+                "url": "/home/rpradorj/projects/auth-package",
+                "reference": "dbe91e7ebbed6b340dbcc81956526c2f9cc5cd2c"
+            },
+            "require": {
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.11",
+                "phpunit/phpunit": "^10.5"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "PradoSystems\\Auth\\": "src/"
+                },
+                "files": [
+                    "src/Helpers.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "PradoSystems\\Auth\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ],
+                "stan": [
+                    "phpstan analyse -c phpstan.neon"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Auth package (contracts + actions + facade) for PradoSystems.",
+            "transport-options": {
+                "symlink": true,
+                "relative": false
+            },
+            "install-path": "../pradosystems/auth"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

@@ -1,0 +1,1 @@
+curl -L -v -X POST https://mockup.pradosystems.net/login -d "email=admin@prado.com&password=senha123"

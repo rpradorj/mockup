@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>Dashboard | Analytics | Prado Systems</title>
+    
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./assets/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="./assets/bootstrap-icons.min.css">
+    
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="https://www.mercadopago.com/v2/security.js" view="checkout"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.1/vanilla-masker.min.js"></script>
+    <script type="module" crossorigin="" src="/assets/index-C4LLdIVz.js"></script>
+    <link rel="stylesheet" crossorigin="" href="/assets/index-Bp1A1bw0.css">
+    <script type="module">
+window.onerror = (message, source, lineno, colno, errorObj) => {
+    const errorDetails = errorObj ? JSON.stringify({
+        name: errorObj.name,
+        message: errorObj.message,
+        stack: errorObj.stack,
+        source,
+        lineno,
+        colno,
+    }) : null;
+
+    window.parent.postMessage({
+        type: 'horizons-runtime-error',
+        message,
+        error: errorDetails
+    }, '*');
+};
+</script>
+    <script type="module">
+const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+        for (const addedNode of mutation.addedNodes) {
+            if (
+                addedNode.nodeType === Node.ELEMENT_NODE &&
+                (
+                    addedNode.tagName?.toLowerCase() === 'vite-error-overlay' ||
+                    addedNode.classList?.contains('backdrop')
+                )
+            ) {
+                handleViteOverlay(addedNode);
+            }
+        }
+    }
+});
+
+observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+});
+
+function handleViteOverlay(node) {
+    if (!node.shadowRoot) {
+        return;
+    }
+
+    const backdrop = node.shadowRoot.querySelector('.backdrop');
+
+    if (backdrop) {
+        const overlayHtml = backdrop.outerHTML;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(overlayHtml, 'text/html');
+        const messageBodyElement = doc.querySelector('.message-body');
+        const fileElement = doc.querySelector('.file');
+        const messageText = messageBodyElement ? messageBodyElement.textContent.trim() : '';
+        const fileText = fileElement ? fileElement.textContent.trim() : '';
+        const error = messageText + (fileText ? ' File:' + fileText : '');
+
+        window.parent.postMessage({
+            type: 'horizons-vite-error',
+            error,
+        }, '*');
+    }
+}
+</script>
+    <script type="module">
+const originalConsoleError = console.error;
+console.error = function(...args) {
+    originalConsoleError.apply(console, args);
+
+    let errorString = '';
+
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        if (arg instanceof Error) {
+            errorString = arg.stack || `${arg.name}: ${arg.message}`;
+            break;
+        }
+    }
+
+    if (!errorString) {
+        errorString = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ');
+    }
+
+    window.parent.postMessage({
+        type: 'horizons-console-error',
+        error: errorString
+    }, '*');
+};
+</script>
+    <script type="module">
+const originalFetch = window.fetch;
+
+window.fetch = function(...args) {
+    const url = args[0] instanceof Request ? args[0].url : args[0];
+
+    // Skip WebSocket URLs
+    if (url.startsWith('ws:') || url.startsWith('wss:')) {
+        return originalFetch.apply(this, args);
+    }
+
+    return originalFetch.apply(this, args)
+        .then(async response => {
+            const contentType = response.headers.get('Content-Type') || '';
+
+            // Exclude HTML document responses
+            const isDocumentResponse =
+                contentType.includes('text/html') ||
+                contentType.includes('application/xhtml+xml');
+
+            if (!response.ok && !isDocumentResponse) {
+                    const responseClone = response.clone();
+                    const errorFromRes = await responseClone.text();
+                    const requestUrl = response.url;
+                    const requestMethod = args[0] instanceof Request ? args[0].method : (args[1]?.method || 'GET');
+                    
+                    console.error(`Fetch error (${requestMethod} ${requestUrl}): ${response.status} ${response.statusText} - ${errorFromRes}`);
+            }
+
+            return response;
+        })
+        .catch(error => {
+            if (!url.match(/.html?$/i)) {
+                console.error(error);
+            }
+
+            throw error;
+        });
+};
+</script>
+    <script type="module">
+if (window.navigation && window.self !== window.top) {
+    window.navigation.addEventListener('navigate', (event) => {
+        const url = event.destination.url;
+
+        try {
+            const destinationUrl = new URL(url);
+            const destinationOrigin = destinationUrl.origin;
+            const currentOrigin = window.location.origin;
+
+            if (destinationOrigin === currentOrigin) {
+                return;
+            }
+        } catch (error) {
+            return;
+        }
+
+        window.parent.postMessage({
+            type: 'horizons-navigation-error',
+            url,
+        }, '*');
+    });
+}
+</script>
+
+  </head>
+
+
+<body style="overflow: unset;">
+
+    <div id="root">
+<div role="region" aria-label="Notifications (F8)" tabindex="-1" style="pointer-events: none;">
+<ol tabindex="-1" class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]">
+</ol>
+</div>
+<div class="flex flex-col h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+<header class="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center px-4 lg:px-6 justify-between shrink-0 z-50 relative">
+<div class="flex items-center gap-3">
+<button class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors" aria-label="Toggle sidebar">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu ">
+<line x1="4" x2="20" y1="12" y2="12">
+</line>
+<line x1="4" x2="20" y1="6" y2="6">
+</line>
+<line x1="4" x2="20" y1="18" y2="18">
+</line>
+</svg>
+</button>
+<div class="flex items-center">
+<img src="https://paysalesstudio.shop/img/logosalesstudio.svg" alt="Logo" class="h-10 w-auto object-contain max-w-[200px]">
+</div>
+</div>
+<div class="flex items-center gap-2 sm:gap-4 ml-auto">
+<div class="relative">
+<button class="p-2 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400" aria-label="Open navigation menu">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip ">
+<circle cx="12" cy="5" r="1">
+</circle>
+<circle cx="19" cy="5" r="1">
+</circle>
+<circle cx="5" cy="5" r="1">
+</circle>
+<circle cx="12" cy="12" r="1">
+</circle>
+<circle cx="19" cy="12" r="1">
+</circle>
+<circle cx="5" cy="12" r="1">
+</circle>
+<circle cx="12" cy="19" r="1">
+</circle>
+<circle cx="19" cy="19" r="1">
+</circle>
+<circle cx="5" cy="19" r="1">
+</circle>
+</svg>
+</button>
+</div>
+<button class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500" aria-label="User menu">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user ">
+<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+</path>
+<circle cx="12" cy="7" r="4">
+</circle>
+</svg>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden relative">
+<aside class="hidden lg:block w-64 h-full shrink-0">
+<div class="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 pt-4">
+<div class="flex-1 p-3 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-400" href="/dashboard" data-discover="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard ">
+<rect width="7" height="9" x="3" y="3" rx="1">
+</rect>
+<rect width="7" height="5" x="14" y="3" rx="1">
+</rect>
+<rect width="7" height="9" x="14" y="12" rx="1">
+</rect>
+<rect width="7" height="5" x="3" y="16" rx="1">
+</rect>
+</svg>
+<span>
+Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" href="./produtos.html" data-discover="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package ">
+<path d="m7.5 4.27 9 5.15">
+</path>
+<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
+</path>
+<path d="m3.3 7 8.7 5 8.7-5">
+</path>
+<path d="M12 22V12">
+</path>
+</svg>
+<span>
+Produtos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" href="/area-de-membros" data-discover="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users ">
+<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+</path>
+<circle cx="9" cy="7" r="4">
+</circle>
+<path d="M22 21v-2a4 4 0 0 0-3-3.87">
+</path>
+<path d="M16 3.13a4 4 0 0 1 0 7.75">
+</path>
+</svg>
+<span>
+Área de membros</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" href="/pedidos" data-discover="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart ">
+<circle cx="8" cy="21" r="1">
+</circle>
+<circle cx="19" cy="21" r="1">
+</circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12">
+</path>
+</svg>
+<span>
+Pedidos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" href="/formas-de-pagamento" data-discover="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card ">
+<rect width="20" height="14" x="2" y="5" rx="2">
+</rect>
+<line x1="2" x2="22" y1="10" y2="10">
+</line>
+</svg>
+<span>
+Formas de Pagamento</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" href="/aplicacoes" data-discover="true">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings ">
+<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
+</path>
+<circle cx="12" cy="12" r="3">
+</circle>
+</svg>
+<span>
+Aplicações</span>
+</a>
+</div>
+<div class="p-4 border-t border-gray-200 dark:border-gray-800 space-y-4">
+<div class="px-2 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center overflow-hidden">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user text-violet-600 dark:text-violet-400">
+<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+</path>
+<circle cx="12" cy="7" r="4">
+</circle>
+</svg>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+Ronaldo Prado</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+rpradorj@yahoo.com.br</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon ">
+<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z">
+</path>
+</svg>
+<span>
+Modo escuro</span>
+</div>
+<button type="button" role="switch" aria-checked="true" data-state="checked" value="on" class="peer inline-flex h-[24px] w-[44px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input">
+<span data-state="checked" class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0">
+</span>
+</button>
+</div>
+<button class="flex items-center gap-3 px-2 py-2 w-full text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-sm font-medium transition-colors">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out ">
+<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
+</path>
+<polyline points="16 17 21 12 16 7">
+</polyline>
+<line x1="21" x2="9" y1="12" y2="12">
+</line>
+</svg>
+<span>
+Sair da Conta</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-4 lg:p-8 scrollbar-hide bg-gray-50 dark:bg-black transition-colors duration-300">
+<div class="max-w-7xl mx-auto">
+<div class="p-4 md:p-6 max-w-[1600px] mx-auto space-y-4 pb-8 overflow-x-hidden">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+Dashboard</h1>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500">
+</span>
+<p class="text-xs text-gray-500 dark:text-gray-400">
+Visão geral de <span class="font-medium text-gray-900 dark:text-gray-200">
+Todos os Produtos</span>
+ • 7 dias</p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-2 bg-white dark:bg-gray-950 p-1.5 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+<div class="flex items-center px-2 text-gray-400">
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter ">
+<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3">
+</polygon>
+</svg>
+</div>
+<select class="h-8 pl-2 pr-8 text-xs bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded hover:border-gray-300 dark:hover:border-gray-700 outline-none text-gray-700 dark:text-gray-200 font-medium cursor-pointer transition-colors focus:ring-1 focus:ring-violet-500/50" aria-label="Selecionar produto">
+<option value="Todos os Produtos">
+Todos os Produtos</option>
+</select>
+<div class="w-px h-4 bg-gray-200 dark:bg-gray-800 mx-1">
+</div>
+<div class="flex items-center gap-2">
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar text-gray-400 ml-1">
+<path d="M8 2v4">
+</path>
+<path d="M16 2v4">
+</path>
+<rect width="18" height="18" x="3" y="4" rx="2">
+</rect>
+<path d="M3 10h18">
+</path>
+</svg>
+<select class="h-8 pl-1 pr-6 text-xs bg-transparent border-none outline-none text-gray-700 dark:text-gray-200 font-medium cursor-pointer" aria-label="Selecionar período">
+<option class="bg-white dark:bg-gray-950" value="hoje">
+Hoje</option>
+<option class="bg-white dark:bg-gray-950" value="ontem">
+Ontem</option>
+<option class="bg-white dark:bg-gray-950" value="7">
+Últimos 7 dias</option>
+<option class="bg-white dark:bg-gray-950" value="14">
+Últimos 14 dias</option>
+<option class="bg-white dark:bg-gray-950" value="30">
+Últimos 30 dias</option>
+<option class="bg-white dark:bg-gray-950" value="maximo">
+Todo o período</option>
+<option class="bg-white dark:bg-gray-950" value="personalizado">
+Personalizado</option>
+</select>
+</div>
+<button class="ml-auto p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Atualizar dados">
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw ">
+<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8">
+</path>
+<path d="M21 3v5h-5">
+</path>
+<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16">
+</path>
+<path d="M8 16H3v5">
+</path>
+</svg>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-4 hover:border-violet-200 dark:hover:border-violet-900/50 transition-colors">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Vendas Aprovadas</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+0</h3>
+</div>
+<div class="p-2 rounded-lg border bg-violet-50 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart text-violet-600 dark:text-violet-400">
+<circle cx="8" cy="21" r="1">
+</circle>
+<circle cx="19" cy="21" r="1">
+</circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12">
+</path>
+</svg>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-4 hover:border-violet-200 dark:hover:border-violet-900/50 transition-colors">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Receita Líquida</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+R$&nbsp;0,00</h3>
+</div>
+<div class="p-2 rounded-lg border bg-emerald-50 dark:bg-emerald-900/10 border-emerald-100 dark:border-emerald-900/20">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign text-emerald-600 dark:text-emerald-400">
+<line x1="12" x2="12" y1="2" y2="22">
+</line>
+<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6">
+</path>
+</svg>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-4 hover:border-violet-200 dark:hover:border-violet-900/50 transition-colors">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Faturamento Total</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+R$&nbsp;0,00</h3>
+</div>
+<div class="p-2 rounded-lg border bg-blue-50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/20">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text text-blue-600 dark:text-blue-400">
+<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z">
+</path>
+<path d="M14 2v4a2 2 0 0 0 2 2h4">
+</path>
+<path d="M10 9H8">
+</path>
+<path d="M16 13H8">
+</path>
+<path d="M16 17H8">
+</path>
+</svg>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-4 hover:border-violet-200 dark:hover:border-violet-900/50 transition-colors">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Ticket Médio</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+R$&nbsp;0,00</h3>
+</div>
+<div class="p-2 rounded-lg border bg-amber-50 dark:bg-amber-900/10 border-amber-100 dark:border-amber-900/20">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tag text-amber-600 dark:text-amber-400">
+<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z">
+</path>
+<circle cx="7.5" cy="7.5" r=".5" fill="currentColor">
+</circle>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="rounded-lg border shadow-sm p-4 bg-white/50 dark:bg-gray-950/50 border-dashed border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Taxas Pagas</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+R$&nbsp;0,00</h3>
+</div>
+<div class="p-2 rounded-lg border bg-gray-100 dark:bg-gray-900/10 border-gray-200 dark:border-gray-700/50">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-percent text-gray-600 dark:text-gray-400">
+<line x1="19" x2="5" y1="5" y2="19">
+</line>
+<circle cx="6.5" cy="6.5" r="2.5">
+</circle>
+<circle cx="17.5" cy="17.5" r="2.5">
+</circle>
+</svg>
+</div>
+</div>
+</div>
+<div class="rounded-lg border shadow-sm p-4 bg-white/50 dark:bg-gray-950/50 border-dashed border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Reembolsos (0 vendas)</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+R$&nbsp;0,00</h3>
+</div>
+<div class="p-2 rounded-lg border bg-yellow-50 dark:bg-yellow-900/10 border-yellow-100 dark:border-yellow-900/20">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign text-yellow-600 dark:text-yellow-400">
+<line x1="12" x2="12" y1="2" y2="22">
+</line>
+<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6">
+</path>
+</svg>
+</div>
+</div>
+</div>
+<div class="rounded-lg border shadow-sm p-4 bg-white/50 dark:bg-gray-950/50 border-dashed border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+Chargebacks (0 vendas)</p>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+R$&nbsp;0,00</h3>
+</div>
+<div class="p-2 rounded-lg border bg-red-50 dark:bg-red-900/10 border-red-100 dark:border-red-900/20">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign text-red-600 dark:text-red-400">
+<line x1="12" x2="12" y1="2" y2="22">
+</line>
+<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6">
+</path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm xl:col-span-2 p-5 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold text-gray-800 dark:text-white">
+Desempenho de Vendas</h3>
+<span class="text-xs text-gray-400">
+Receita x Tempo</span>
+</div>
+<div class="flex-1 min-h-[250px]">
+<div class="h-64 w-full">
+<canvas style="display: block; box-sizing: border-box; height: 256px; width: 731.7px;" width="914" height="320">
+</canvas>
+</div>
+</div>
+</div>
+<div class="space-y-4 flex flex-col">
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-5 flex flex-col">
+<h3 class="text-sm font-bold text-gray-800 dark:text-white mb-1">
+Métodos de Pagamento</h3>
+<p class="text-[10px] text-gray-500 dark:text-gray-400 mb-4">
+Volume por canal</p>
+<div class="flex-1 flex items-center justify-center min-h-[160px]">
+<div class="h-48">
+<canvas style="display: block; box-sizing: border-box; height: 192px; width: 300px;" width="375" height="240">
+</canvas>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-gray-950 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-5 flex-1">
+<h3 class="text-sm font-bold text-gray-800 dark:text-white mb-4">
+Taxa de Conversão</h3>
+<div class="space-y-4">
+<div class="mb-4 last:mb-0">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-medium text-gray-600 dark:text-gray-300">
+PIX</span>
+<span class="text-xs font-bold text-gray-800 dark:text-white">
+0.0%</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5 dark:bg-gray-800 overflow-hidden">
+<div class="h-1.5 rounded-full bg-teal-500" style="width: 0%;">
+</div>
+</div>
+</div>
+<div class="mb-4 last:mb-0">
+<div class="flex justify-between items-center mb-1.5">
+<span class="text-xs font-medium text-gray-600 dark:text-gray-300">
+Cartão</span>
+<span class="text-xs font-bold text-gray-800 dark:text-white">
+0.0%</span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5 dark:bg-gray-800 overflow-hidden">
+<div class="h-1.5 rounded-full bg-pink-500" style="width: 0%;">
+</div>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800 grid grid-cols-3 gap-2 text-center">
+<div class="bg-gray-50 dark:bg-gray-900/50 p-2 rounded">
+<div class="text-[10px] text-gray-400 uppercase font-bold">
+PIX</div>
+<div class="text-sm font-bold text-gray-900 dark:text-white">
+0</div>
+</div>
+<div class="bg-gray-50 dark:bg-gray-900/50 p-2 rounded">
+<div class="text-[10px] text-gray-400 uppercase font-bold">
+Cartão</div>
+<div class="text-sm font-bold text-gray-900 dark:text-white">
+0</div>
+</div>
+<div class="bg-gray-50 dark:bg-gray-900/50 p-2 rounded">
+<div class="text-[10px] text-gray-400 uppercase font-bold">
+Total</div>
+<div class="text-sm font-bold text-gray-900 dark:text-white">
+0</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+
+  
+<div id="idbpfpeogbhifooiagnbbdbffplkfcke">
+</div>
+</body>
+

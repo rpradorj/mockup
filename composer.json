@@ -1,0 +1,19 @@
+{
+    "name": "pradosystems/mockup",
+    "description": "Mockup Prado Systems",
+    "version": "1.0.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/home/rpradorj/projects/auth-package",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "pradosystems/auth": "1.0.0"
+    }
+}
